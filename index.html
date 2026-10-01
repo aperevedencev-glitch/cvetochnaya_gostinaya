@@ -334,7 +334,8 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
       <div class="field"><label for="ophone">Телефон</label><input id="ophone" type="tel" required></div>
       <div class="field"><label for="ocard">Текст открытки</label><input id="ocard" placeholder="Необязательно"></div>
       <button class="btn" type="submit">Оформить заказ</button>
-      <p style="font-size:12px;color:var(--muted)">Это демонстрационный сайт: заказ никуда не отправляется.</p>
+      <input type="text" id="owebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+      <p style="font-size:12px;color:var(--muted)" id="orderNote">Это демонстрационный сайт: заказ никуда не отправляется.</p>
     </form>
   </aside>
 </div>
@@ -395,6 +396,7 @@ $('#slots').onclick=e=>{const b=e.target.closest('[data-s]');if(b){slot=b.datase
 $('#checkForm').onsubmit=e=>{e.preventDefault();const a=$('#addr').value.trim(),res=$('#checkResult');
   if(!a){res.hidden=false;res.textContent='Укажите улицу и дом, чтобы мы проверили зону доставки.';return}
   const d=new Date(dateEl.value).toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+  lastDelivery={address:a,date:d,slot,recipient:$('#who').value};
   res.hidden=false;res.textContent=`Успеваем: ${d}, ${slot}, по адресу «${a}». Доставка ${$('#who').value==='Себе'?'':'сюрпризом '}— 390 ₽, от 5000 ₽ бесплатно.`};
 
 /* subscription */
@@ -411,6 +413,10 @@ $('#months').oninput=calc;
 $('#calc').onsubmit=e=>{e.preventDefault();const c=calc();addCart(`Подписка: ${c.z.n}, ${c.f.n.toLowerCase()}, ${c.m} мес.`,c.one*c.n)};calc();
 
 /* cart */
+/* заявки уходят в телеграм-бот: вставьте адрес воркера + /lead, например https://flowers-bot.имя.workers.dev/lead */
+const LEAD_URL='';
+let lastDelivery={};
+if(LEAD_URL)$('#orderNote').textContent='После заказа флорист свяжется с вами и пришлёт фото букета перед отправкой.';
 let cart=[];
 function addCart(name,p){const ex=cart.find(c=>c.name===name);ex?ex.q++:cart.push({name,p,q:1});renderCart();toast('Добавлено в корзину')}
 function renderCart(){const n=cart.reduce((a,c)=>a+c.q,0);$('#cartCount').textContent=n;
@@ -421,8 +427,21 @@ $('#cartOpen').onclick=()=>{$('#drawer').hidden=false;$('#cartClose').focus()};
 $('#cartClose').onclick=()=>$('#drawer').hidden=true;
 $('#drawer').onclick=e=>{if(e.target.id==='drawer')$('#drawer').hidden=true};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#drawer').hidden=true});
-$('#order').onsubmit=e=>{e.preventDefault();if(!cart.length){toast('Корзина пуста');return}if(!$('#oname').value||!$('#ophone').value){toast('Укажите имя и телефон');return}
-  cart=[];renderCart();$('#drawer').hidden=true;toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
+$('#order').onsubmit=async e=>{e.preventDefault();
+  if(!cart.length){toast('Корзина пуста');return}
+  const name=$('#oname').value.trim(),phone=$('#ophone').value.trim();
+  if(!name||!phone){toast('Укажите имя и телефон');return}
+  if(LEAD_URL){
+    const btn=e.submitter||$('#order button[type=submit]');btn.disabled=true;btn.textContent='Отправляем…';
+    try{
+      const r=await fetch(LEAD_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({
+        name,phone,card:$('#ocard').value.trim(),website:$('#owebsite').value,
+        items:cart.map(c=>({name:c.name,q:c.q,p:c.p})),total:cart.reduce((a,c)=>a+c.p*c.q,0),delivery:lastDelivery})});
+      if(!r.ok)throw new Error(r.status);
+    }catch(err){toast('Не удалось отправить. Позвоните: +7 (916) 831-92-44');return}
+    finally{btn.disabled=false;btn.textContent='Оформить заказ'}
+  }
+  cart=[];renderCart();$('#drawer').hidden=true;$('#order').reset();toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
 
 renderFilters();renderGrid();renderCart();

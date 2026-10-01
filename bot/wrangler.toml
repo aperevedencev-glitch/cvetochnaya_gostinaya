@@ -1,0 +1,13 @@
+name = "flowers-bot"
+main = "worker.js"
+compatibility_date = "2026-09-01"
+
+[vars]
+SITE_URL = "https://aperevedencev-glitch.github.io/cvetochnaya_gostinaya/"
+ALLOWED_ORIGIN = "https://aperevedencev-glitch.github.io"
+# ADMIN_CHAT_ID задайте после того, как узнаете его командой /id
+ADMIN_CHAT_ID = ""
+
+# Секреты задаются отдельно, не в этом файле:
+#   npx wrangler secret put BOT_TOKEN
+#   npx wrangler secret put WEBHOOK_SECRET
