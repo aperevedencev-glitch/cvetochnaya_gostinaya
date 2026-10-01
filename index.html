@@ -161,6 +161,35 @@ details p{color:var(--muted);margin-top:10px;max-width:65ch}
 .ico.tg{background:#2AABEE}.ico.wa{background:#25D366}.ico.ig{background:linear-gradient(45deg,#F9A13B,#E1306C 50%,#833AB4)}.ico.vk{background:#0077FF}.ico.max{background:linear-gradient(135deg,#4C6FFF,#9B4DFF)}
 .hero-social{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
 .hero-social a{color:var(--peony);font-weight:600;text-decoration:none;border-bottom:1px solid currentColor}
+/* конструктор */
+.builder{background:var(--surface);border-block:1px solid var(--line)}
+.b-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:36px;align-items:start}
+.b-controls{display:grid;gap:22px;min-width:0}
+.stems{display:grid;gap:14px}
+.stem{display:grid;grid-template-columns:20px 1fr auto;gap:4px 12px;align-items:center}
+.stem .dot{width:16px;height:16px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+.stem label{font-weight:600}
+.stem label small{font-weight:500;color:var(--muted);margin-left:6px}
+.stem output{font-variant-numeric:tabular-nums;font-weight:700;min-width:5.5em;text-align:right}
+.stem input[type=range]{grid-column:2/4;width:100%;accent-color:var(--peony)}
+.opt-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:8px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:14px;text-align:left;line-height:1.3}
+.opt small{display:block;color:var(--muted);font-variant-numeric:tabular-nums}
+.opt[aria-pressed="true"]{border-color:var(--peony);box-shadow:inset 0 0 0 1px var(--peony)}
+.b-side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);display:grid;gap:16px;background:var(--bg);border:1px solid var(--line);border-radius:22px;padding:22px}
+.b-preview{aspect-ratio:1/1;max-width:100%;border-radius:16px;background:var(--wash);overflow:hidden}
+.b-preview svg{width:100%;height:100%;display:block}
+.b-lines{display:grid;gap:6px;font-size:14px;margin:0;padding:0;list-style:none}
+.b-lines li{display:flex;justify-content:space-between;gap:12px;font-variant-numeric:tabular-nums}
+.b-lines li span:first-child{color:var(--muted)}
+.b-total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:12px}
+.b-total b{font-size:30px;font-variant-numeric:tabular-nums}
+.b-hint{font-size:13px;background:var(--leaf-soft);border-radius:10px;padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.b-hint button{border:0;background:var(--surface);border-radius:999px;padding:6px 12px;font-weight:600;cursor:pointer;font-size:13px}
+.b-actions{display:flex;gap:10px;flex-wrap:wrap}
+.b-actions .btn{flex:1}
+@media(max-width:860px){.b-grid{grid-template-columns:1fr}.b-side{position:static}}
 footer{background:var(--ink);color:var(--bg);padding-block:48px}
 .foot{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:32px}
 .foot h4{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
@@ -192,7 +221,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
       Цветочная гостиная
     </a>
     <nav aria-label="Разделы">
-      <a href="#catalog">Каталог</a><a href="#how">Как мы работаем</a><a href="#subscription">Подписка</a><a href="#faq">Вопросы</a>
+      <a href="#catalog">Каталог</a><a href="#builder">Конструктор</a><a href="#how">Как мы работаем</a><a href="#subscription">Подписка</a><a href="#faq">Вопросы</a>
     </nav>
     <button class="cart-btn" id="cartOpen">Корзина<b id="cartCount">0</b></button>
   </div>
@@ -239,6 +268,28 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
       <div class="chips" id="filters"></div>
     </div>
     <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="builder" id="builder">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Конструктор</div><h2>Соберите свой букет</h2><p>Двигайте ползунки: цена и вид букета меняются сразу. Флорист соберёт его по вашему рецепту и пришлёт фото перед отправкой.</p></div>
+    </div>
+    <div class="b-grid">
+      <form class="b-controls" id="bForm" onsubmit="return false">
+        <div class="stems" id="bStems"></div>
+        <div><div class="opt-label">Зелень</div><div class="opts" id="bGreen"></div></div>
+        <div><div class="opt-label">Оформление</div><div class="opts" id="bWrap"></div></div>
+      </form>
+      <aside class="b-side" aria-live="polite">
+        <div class="b-preview" id="bPreview"></div>
+        <ul class="b-lines" id="bLines"></ul>
+        <div class="b-hint" id="bHint" hidden></div>
+        <div class="b-total"><span id="bCount">0 стеблей</span><b id="bTotal">0 ₽</b></div>
+        <div class="b-actions"><button type="button" class="btn ghost" id="bReset">Сбросить</button><button type="button" class="btn" id="bAdd">В корзину</button></div>
+      </aside>
+    </div>
   </div>
 </section>
 
@@ -444,6 +495,79 @@ $('#order').onsubmit=async e=>{e.preventDefault();
   cart=[];renderCart();$('#drawer').hidden=true;$('#order').reset();toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
 
+/* конструктор букета */
+(function(){
+  const STEMS=[
+    {k:'rose',n:'Роза 50 см',p:180,max:51,v:9,c:['#C8344F','#9E2240'],forms:['роза','розы','роз']},
+    {k:'peony',n:'Пион',p:450,max:25,v:0,c:['#F2B6C8','#D45C82'],forms:['пион','пиона','пионов']},
+    {k:'eust',n:'Эустома',p:220,max:25,v:5,c:['#C9B3E6','#9A79B8'],forms:['эустома','эустомы','эустом']},
+    {k:'ranun',n:'Ранункулюс',p:260,max:25,v:0,c:['#F6B7A8','#E98A6A'],forms:['ранункулюс','ранункулюса','ранункулюсов']},
+    {k:'tulip',n:'Тюльпан',p:120,max:51,v:0,c:['#F6A04D','#E07A2A'],forms:['тюльпан','тюльпана','тюльпанов']},
+    {k:'hydr',n:'Гортензия',p:590,max:9,v:0,c:['#F3F1EA','#DCD6C8'],forms:['гортензия','гортензии','гортензий']}
+  ];
+  const GREEN=[{k:'none',n:'Без зелени',p:0},{k:'euc',n:'Эвкалипт',p:350},{k:'rus',n:'Рускус',p:250},{k:'pist',n:'Фисташка',p:300}];
+  const WRAP=[{k:'kraft',n:'Крафт и лента',p:250},{k:'matte',n:'Матовая плёнка',p:300},{k:'box',n:'Шляпная коробка',p:900},{k:'none',n:'Без упаковки',p:0}];
+  let green='euc',wrap='kraft';
+  const plural=(n,f)=>{const a=n%10,b=n%100;return f[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<10||b>=20))?1:2]};
+  const stemWord=n=>plural(n,['стебель','стебля','стеблей']);
+
+  $('#bStems').innerHTML=STEMS.map(s=>`<div class="stem"><span class="dot" style="background:${s.c[0]}"></span>
+    <label for="b_${s.k}">${s.n}<small>${rub(s.p)} / шт.</small></label><output id="o_${s.k}" for="b_${s.k}"></output>
+    <input type="range" id="b_${s.k}" min="0" max="${s.max}" step="1" value="${s.v}" aria-label="${s.n}, количество"></div>`).join('');
+  const opts=(el,arr,cur)=>{$(el).innerHTML=arr.map(o=>`<button type="button" class="opt" data-k="${o.k}" aria-pressed="${o.k===cur}">${o.n}<small>${o.p?'+ '+rub(o.p):'бесплатно'}</small></button>`).join('')};
+
+  function rand(seed){return()=>((seed=Math.imul(seed^seed>>>15,seed|1)+0x6D2B79F5|0)>>>0)/4294967296}
+  function preview(list){
+    const r=rand(7),W=300,H=300,cx=150,cy=128;let back='',front='';
+    const flat=[];list.forEach(s=>{for(let i=0;i<s.v;i++)flat.push(s)});
+    const shown=flat.length>60?flat.filter((_,i)=>i%Math.ceil(flat.length/60)===0):flat;
+    // перемешиваем, чтобы сорта распределились по букету
+    for(let i=shown.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[shown[i],shown[j]]=[shown[j],shown[i]]}
+    const n=shown.length,R=Math.min(118,30+Math.sqrt(n)*15);
+    if(green!=='none'){const gc=green==='euc'?'#8FB3A3':green==='rus'?'#3E7A55':'#5F8F4E';
+      for(let i=0;i<14;i++){const a=i/14*Math.PI*2,x=cx+Math.cos(a)*(R+6),y=cy+Math.sin(a)*(R*.72+6);
+        back+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${green==='euc'?11:16}" ry="${green==='euc'?11:6}" fill="${gc}" transform="rotate(${(a*57.3).toFixed(0)} ${x.toFixed(1)} ${y.toFixed(1)})"/>`}}
+    shown.forEach((s,i)=>{const t=Math.sqrt((i+.5)/n),a=i*2.39996,x=cx+Math.cos(a)*t*R,y=cy+Math.sin(a)*t*R*.72;
+      const big=s.k==='hydr'?22:s.k==='peony'?18:s.k==='tulip'?11:13;
+      if(s.k==='tulip')front+=`<path d="M${x-9} ${y-6}l4.5 5 4.5-8 4.5 8 4.5-5v7a9 9 0 0 1-18 0z" fill="${s.c[0]}" stroke="${s.c[1]}" stroke-width="1"/>`;
+      else if(s.k==='hydr'){front+=`<circle cx="${x}" cy="${y}" r="${big}" fill="${s.c[0]}" stroke="${s.c[1]}"/>`;for(let d=0;d<6;d++){front+=`<circle cx="${x+Math.cos(d)*10}" cy="${y+Math.sin(d)*10}" r="4" fill="${s.c[1]}" opacity=".6"/>`}}
+      else front+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big}" fill="${s.c[0]}"/><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(big*.45).toFixed(1)}" fill="${s.c[1]}" opacity=".7"/>`});
+    let wrapSvg='';
+    if(wrap==='box')wrapSvg=`<rect x="${cx-R*.8}" y="${cy+R*.45}" width="${R*1.6}" height="${300-cy-R*.45-14}" rx="8" fill="#FBFAF7" stroke="#DDD8CC"/><ellipse cx="${cx}" cy="${cy+R*.45}" rx="${R*.8}" ry="10" fill="#EFEBE2"/>`;
+    else if(wrap!=='none'){const by=Math.round((cy+R*.3+290)/2+18),col=wrap==='kraft'?'#D2B48C':'#E8C9D3';wrapSvg=`<path d="M${cx-R-14} ${cy+R*.3}L${cx+R+14} ${cy+R*.3}L${cx+20} 290L${cx-20} 290Z" fill="${col}" opacity=".95"/><path d="M${cx-8} ${by}q-26-16-30 3q16 12 30-3zM${cx+8} ${by}q26-16 30 3q-16 12-30-3z" fill="var(--coral)"/><circle cx="${cx}" cy="${by}" r="6" fill="var(--coral)"/>`}
+    else wrapSvg=`<path d="M${cx-14} ${cy+R*.5}L${cx-6} 292M${cx} ${cy+R*.5}V292M${cx+14} ${cy+R*.5}L${cx+6} 292" stroke="#5E8C5A" stroke-width="4" stroke-linecap="round"/>`;
+    const empty=n?'':`<text x="150" y="150" text-anchor="middle" font-size="14" fill="var(--muted)" font-family="Manrope,sans-serif">Добавьте цветы ползунками</text>`;
+    // упаковка позади цветов, коробка — спереди
+    $('#bPreview').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Предпросмотр букета">${wrap==='box'?back+front+wrapSvg:wrapSvg+back+front}${empty}</svg>`;
+  }
+
+  function calc(){
+    const list=STEMS.map(s=>({...s,v:+$('#b_'+s.k).value}));
+    list.forEach(s=>$('#o_'+s.k).textContent=s.v?`${s.v} шт. · ${rub(s.v*s.p)}`:'—');
+    const count=list.reduce((a,s)=>a+s.v,0),flowers=list.reduce((a,s)=>a+s.v*s.p,0);
+    const g=GREEN.find(x=>x.k===green),w=WRAP.find(x=>x.k===wrap);
+    const work=count?Math.max(300,Math.round(flowers*.1/10)*10):0;
+    const total=count?flowers+g.p+w.p+work:0;
+    $('#bLines').innerHTML=[['Цветы',flowers],[g.n,g.p],[w.n,w.p],['Работа флориста (10%, от 300 ₽)',work]].filter(([,v])=>v).map(([k,v])=>`<li><span>${k}</span><span>${rub(v)}</span></li>`).join('');
+    $('#bCount').textContent=`${count} ${stemWord(count)}`;$('#bTotal').textContent=rub(total);
+    const hint=$('#bHint');
+    if(count&&count%2===0&&count<15){hint.hidden=false;hint.innerHTML=`<span>Чётное число цветов в России принято дарить на траур.</span><button type="button" id="bOdd">Добавить ещё один</button>`}
+    else hint.hidden=true;
+    $('#bAdd').disabled=!count;
+    preview(list);
+    return {list,count,total};
+  }
+  $('#bStems').addEventListener('input',calc);
+  $('#bGreen').onclick=e=>{const b=e.target.closest('[data-k]');if(b){green=b.dataset.k;opts('#bGreen',GREEN,green);calc()}};
+  $('#bWrap').onclick=e=>{const b=e.target.closest('[data-k]');if(b){wrap=b.dataset.k;opts('#bWrap',WRAP,wrap);calc()}};
+  $('#bHint').onclick=e=>{if(e.target.id!=='bOdd')return;const first=STEMS.find(s=>+$('#b_'+s.k).value>0);const el=$('#b_'+first.k);if(+el.value<+el.max){el.value=+el.value+1}calc()};
+  $('#bReset').onclick=()=>{STEMS.forEach(s=>$('#b_'+s.k).value=s.v);green='euc';wrap='kraft';opts('#bGreen',GREEN,green);opts('#bWrap',WRAP,wrap);calc()};
+  $('#bAdd').onclick=()=>{const {list,count,total}=calc();if(!count)return;
+    const parts=list.filter(s=>s.v).map(s=>`${s.v} ${plural(s.v,s.forms)}`).join(', ');
+    const g=GREEN.find(x=>x.k===green),w=WRAP.find(x=>x.k===wrap);
+    addCart(`Свой букет: ${parts}${green!=='none'?', '+g.n.toLowerCase():''} · ${w.n.toLowerCase()}`,total)};
+  opts('#bGreen',GREEN,green);opts('#bWrap',WRAP,wrap);calc();
+})();
 renderFilters();renderGrid();renderCart();
 </script>
 
