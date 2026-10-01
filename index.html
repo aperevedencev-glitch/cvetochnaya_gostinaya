@@ -58,10 +58,14 @@ nav a:hover{color:var(--ink)}
 .hero h1{font-size:clamp(38px,6vw,68px);margin-block:14px 20px}
 .hero h1 em{font-style:normal;color:var(--peony)}
 .lead{font-size:18px;color:var(--muted);max-width:52ch}
-.hero-art{position:relative;margin-top:28px;height:170px;max-width:560px}
-.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
-.bq{transform-box:fill-box;animation:bqIn .6s ease-out both;animation-delay:var(--d)}
-.hero-art .bq:hover{filter:drop-shadow(0 6px 8px rgba(10,70,70,.25))}
+.hero-thumbs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:32px;max-width:640px}
+.thumb{display:grid;gap:4px;text-decoration:none;color:var(--ink);animation:bqIn .6s ease-out both;animation-delay:var(--d)}
+.thumb-pic{display:block;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--wash);border:2px solid var(--surface);box-shadow:0 8px 20px -12px rgba(10,70,70,.45);transition:transform .2s}
+.thumb-pic img,.thumb-pic svg{width:100%;height:100%;object-fit:cover;display:block}
+.thumb:hover .thumb-pic{transform:translateY(-3px)}
+.thumb-name{font-size:12px;font-weight:600;line-height:1.25}
+.thumb-price{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:560px){.hero-thumbs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @keyframes bqIn{from{opacity:.4;translate:0 8px}to{opacity:1;translate:0 0}}
 .check{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:16px;box-shadow:0 20px 50px -30px rgba(10,70,70,.3)}
 .check h3{font-size:24px}
@@ -73,7 +77,7 @@ nav a:hover{color:var(--ink)}
 .slot{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 10px;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
 .slot[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .check-result{font-size:14px;background:var(--leaf-soft);color:var(--ink);border-radius:10px;padding:10px 12px}
-@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-art{height:150px}}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
 
 /* promises */
 .promises{border-block:1px solid var(--line);background:var(--surface);padding-block:28px}
@@ -190,7 +194,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
       <div class="eyebrow">Цветочная мастерская с доставкой</div>
       <h1>Букеты, которые входят в дом <em>как гости</em></h1>
       <p class="lead">Собираем из сезонных цветов в день доставки. Перед отправкой пришлём фото готового букета: вы одобряете, и только потом курьер выезжает.</p>
-      <div class="hero-art" aria-hidden="true"><svg id="heroArt" viewBox="0 0 600 200" preserveAspectRatio="xMinYMid meet"></svg></div>
+      <div class="hero-thumbs" id="heroThumbs" aria-label="Букеты этой недели"></div>
     </div>
     <form class="check" id="checkForm" novalidate>
       <h3>Когда привезти?</h3>
@@ -353,35 +357,11 @@ $('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;filt
 $('#grid').onclick=e=>{const s=e.target.closest('.size');if(s){chosen[s.dataset.id]=s.dataset.s;renderGrid();return}
   const a=e.target.closest('[data-add]');if(a){const it=items.find(i=>i.id==a.dataset.add);const z=SIZES.find(z=>z.k===(chosen[it.id]||'M'));addCart(it.name+' · '+z.name,price(it));}};
 
-/* hero: иконки букетов */
+/* hero: мини-фото букетов из каталога */
 (function(){
-  const F={
-    peony:(x,y,c)=>`<circle cx="${x}" cy="${y}" r="13" fill="${c[0]}"/><circle cx="${x-3}" cy="${y-2}" r="8" fill="${c[2]}"/><circle cx="${x+2}" cy="${y+1}" r="4.5" fill="${c[1]}"/>`,
-    rose:(x,y,c)=>`<circle cx="${x}" cy="${y}" r="12" fill="${c[0]}"/><path d="M${x-6} ${y+1}a6 6 0 1 1 6 6a4 4 0 1 1 -4-4a2 2 0 1 1 2 2" fill="none" stroke="${c[2]}" stroke-width="2" stroke-linecap="round"/>`,
-    tulip:(x,y,c)=>`<path d="M${x-10} ${y-8}l5 6l5-9l5 9l5-6v8a10 10 0 0 1-20 0z" fill="${c[0]}"/><path d="M${x} ${y-11}l5 9v6" fill="none" stroke="${c[1]}" stroke-width="2"/>`,
-    daisy:(x,y,c)=>{let s='';for(let i=0;i<8;i++){s+=`<ellipse cx="${x}" cy="${y-8}" rx="3.6" ry="7" fill="${c[0]}" transform="rotate(${i*45} ${x} ${y})"/>`}return s+`<circle cx="${x}" cy="${y}" r="4.5" fill="${c[1]}"/>`},
-    lavender:(x,y,c)=>{let s=`<path d="M${x} ${y+12}V${y-14}" stroke="var(--leaf)" stroke-width="2"/>`;for(let i=0;i<6;i++){s+=`<ellipse cx="${x+(i%2?3:-3)}" cy="${y-12+i*4.5}" rx="3.4" ry="2.6" fill="${c[i%2]}"/>`}return s}
-  };
-  const B=[
-    {f:'peony',c:['#F2B6C8','#D45C82','#FBDCE5'],name:'Пионы'},
-    {f:'rose',c:['#C8344F','#9E2240','#F08A99'],name:'Розы'},
-    {f:'tulip',c:['#F6A04D','#E07A2A'],name:'Тюльпаны'},
-    {f:'daisy',c:['#FFFFFF','#F2B544'],name:'Ромашки'},
-    {f:'lavender',c:['#A98BD0','#C9B3E6'],name:'Лаванда'}
-  ];
-  const icon=(b,i)=>{const ox=i*120+5,draw=F[b.f];
-    return `<g class="bq" transform="translate(${ox} 20)" style="--d:${i*80}ms"><title>${b.name}</title>
-      <ellipse cx="34" cy="58" rx="13" ry="5" fill="var(--leaf)" transform="rotate(-35 34 58)"/>
-      <ellipse cx="76" cy="58" rx="13" ry="5" fill="var(--leaf)" transform="rotate(35 76 58)"/>
-      <ellipse cx="55" cy="40" rx="5" ry="12" fill="var(--leaf)" opacity=".8"/>
-      ${draw(38,46,b.c)}${draw(72,46,b.c)}${draw(55,30,b.c)}
-      <path d="M22 62H88L62 132H48Z" fill="var(--surface)" stroke="var(--peony)" stroke-width="2" stroke-linejoin="round"/>
-      <path d="M22 62L55 98L88 62" fill="none" stroke="var(--line)" stroke-width="1.5"/>
-      <path d="M46 112q-12-8-14 2q8 6 14-2zM64 112q12-8 14 2q-8 6-14-2z" fill="var(--coral)"/>
-      <circle cx="55" cy="112" r="4" fill="var(--coral)"/>
-    </g>`};
-  $('#heroArt').setAttribute('viewBox','0 0 600 160');
-  $('#heroArt').innerHTML=B.map(icon).join('');
+  $('#heroThumbs').innerHTML=items.map((it,i)=>`<a class="thumb" href="#catalog" style="--d:${i*70}ms" title="${it.name}">
+    <span class="thumb-pic">${PHOTOS[it.id]?`<img src="${PHOTOS[it.id]}" alt="">`:bouquet(it.pal,it.id)}</span>
+    <span class="thumb-name">${it.name}</span><span class="thumb-price">от ${rub(Math.round(it.base/10)*10)}</span></a>`).join('');
 })();
 
 /* delivery checker */
