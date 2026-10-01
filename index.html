@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Цветочная гостиная — букеты из сезонных цветов с доставкой. Фото букета перед отправкой, часовые интервалы, подписка на цветы.">
+<title>Цветочная гостиная</title>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: «гостиная» — тёплые комнаты-секции на сливово-лиловом фоне, асимметричный hero с формой доставки справа */
+:root{
+  --bg:#E6F6F4; --surface:#FFFFFF; --wash:#CDEEEA;
+  --ink:#0F3A3C; --muted:#4A6D6F; --line:#BFE2DE;
+  --peony:#0E8178; --peony-ink:#FFFFFF; --coral:#D2513B; --coral-hover:#BC4430; --coral-ink:#FFFFFF; --leaf:#2F6B55; --leaf-soft:#D6F0E8;
+  --display:"Prata", Georgia, "Times New Roman", serif;
+  --body:"Manrope", "Segoe UI", system-ui, sans-serif;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E2224; --surface:#14302F; --wash:#183A39; --ink:#E4F7F4; --muted:#9DC4C0; --line:#24504D;
+  --peony:#5FD4C8; --peony-ink:#0E2224; --coral:#FF8B74; --coral-hover:#FFA190; --coral-ink:#2A0E08; --leaf:#8CC9A8; --leaf-soft:#173A30; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E2224; --surface:#14302F; --wash:#183A39; --ink:#E4F7F4; --muted:#9DC4C0; --line:#24504D;
+  --peony:#5FD4C8; --peony-ink:#0E2224; --coral:#FF8B74; --coral-hover:#FFA190; --coral-ink:#2A0E08; --leaf:#8CC9A8; --leaf-soft:#173A30; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:1160px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(28px,4vw,40px)}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--peony);font-weight:700}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--peony);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-weight:600;cursor:pointer;background:var(--coral);color:var(--coral-ink);transition:transform .15s,background .15s}
+.btn:hover{transform:translateY(-1px);background:var(--coral-hover)}
+.btn.ghost:hover{background:transparent}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+section{padding-block:72px}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:24px;padding-block:14px}
+.logo{font-family:var(--display);font-size:22px;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo svg{width:30px;height:30px}
+nav{display:flex;gap:22px;margin-left:auto}
+nav a{color:var(--muted);text-decoration:none;font-weight:500;font-size:15px}
+nav a:hover{color:var(--ink)}
+.cart-btn{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600}
+.cart-btn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px;background:var(--coral);color:var(--coral-ink);font-size:12px;margin-left:6px;font-variant-numeric:tabular-nums}
+@media(max-width:760px){nav{display:none}.cart-btn{margin-left:auto}}
+
+/* hero */
+.hero{padding-block:56px 64px}
+.hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(38px,6vw,68px);margin-block:14px 20px}
+.hero h1 em{font-style:normal;color:var(--peony)}
+.lead{font-size:18px;color:var(--muted);max-width:52ch}
+.hero-art{position:relative;margin-top:28px;height:200px}
+.hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.check{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:16px;box-shadow:0 20px 50px -30px rgba(10,70,70,.3)}
+.check h3{font-size:24px}
+.field{display:grid;gap:6px}
+.field label{font-size:13px;font-weight:600;color:var(--muted)}
+.field input,.field select{border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:11px 12px;width:100%}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.slots{display:flex;flex-wrap:wrap;gap:8px}
+.slot{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:6px 10px;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.slot[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.check-result{font-size:14px;background:var(--leaf-soft);color:var(--ink);border-radius:10px;padding:10px 12px}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr}.hero-art{height:150px}}
+
+/* promises */
+.promises{border-block:1px solid var(--line);background:var(--surface);padding-block:28px}
+.prom-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.prom b{display:block;font-family:var(--display);font-weight:400;font-size:20px;margin-bottom:4px}
+.prom span{font-size:14px;color:var(--muted)}
+@media(max-width:860px){.prom-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.prom-grid{grid-template-columns:1fr}}
+
+/* catalog */
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:20px;margin-bottom:28px}
+.sec-head p{color:var(--muted);max-width:48ch;margin-top:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 14px;font-size:14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.card{background:var(--surface);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column;border:1px solid var(--line)}
+.card .pic{aspect-ratio:1/1.1;overflow:hidden;background:var(--wash);position:relative;max-width:100%}
+.card .pic svg{width:100%;height:100%;display:block}
+.card .pic img{width:100%;height:100%;object-fit:cover;object-position:center 40%;display:block;transition:transform .5s}
+.card:hover .pic img{transform:scale(1.04)}
+.tag{position:absolute;top:12px;left:12px;background:var(--surface);border-radius:999px;font-size:12px;font-weight:700;padding:4px 10px}
+.card .body{padding:18px;display:flex;flex-direction:column;gap:12px;flex:1}
+.card h3{font-size:21px}
+.comp{font-size:13px;color:var(--muted);min-height:3em}
+.sizes{display:flex;gap:6px}
+.size{flex:1;border:1px solid var(--line);background:transparent;border-radius:8px;padding:6px 0;font-size:13px;cursor:pointer}
+.size[aria-pressed="true"]{border-color:var(--peony);color:var(--peony);font-weight:700}
+.buy{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+.price{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.buy .btn{padding:9px 16px;font-size:14px}
+
+/* steps */
+.steps{background:var(--wash)}
+.step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:32px}
+.step{display:grid;gap:10px;align-content:start}
+.step .n{font-family:var(--display);font-size:44px;color:var(--peony);line-height:1}
+.step h3{font-size:20px}
+.step p{font-size:15px;color:var(--muted)}
+@media(max-width:860px){.step-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.step-grid{grid-template-columns:1fr}}
+
+/* subscription */
+.sub-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.sub-list{display:grid;gap:12px;margin-top:20px;padding:0;list-style:none}
+.sub-list li{display:flex;gap:12px;color:var(--muted)}
+.sub-list li::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--leaf);margin-top:9px}
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:18px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--bg);border-radius:12px;padding:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:9px 4px;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:16px}
+.total b{font-size:28px;font-variant-numeric:tabular-nums}
+.total small{color:var(--leaf);font-weight:700}
+@media(max-width:860px){.sub-grid{grid-template-columns:1fr}}
+
+/* care */
+.care{background:var(--leaf-soft)}
+.care-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:40px}
+.care dl{display:grid;grid-template-columns:auto 1fr;gap:14px 24px;margin:0}
+.care dt{font-family:var(--display);font-size:22px;color:var(--leaf);font-variant-numeric:tabular-nums;white-space:nowrap}
+.care dd{margin:0;padding-top:4px}
+@media(max-width:760px){.care-grid{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:780px}
+details{border-bottom:1px solid var(--line);padding-block:16px}
+summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::after{content:"+";color:var(--peony);font-size:22px;line-height:1}
+details[open] summary::after{content:"−"}
+details p{color:var(--muted);margin-top:10px;max-width:65ch}
+
+footer{background:var(--ink);color:var(--bg);padding-block:48px}
+.foot{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:32px}
+.foot h4{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.7}
+.foot p,.foot li{opacity:.85;font-size:15px}
+.foot ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+@media(max-width:760px){.foot{grid-template-columns:1fr}}
+
+/* drawer */
+.drawer{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:rgba(5,35,38,.45)}
+.panel{width:min(420px,100%);height:100%;background:var(--surface);padding:24px 22px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;overflow:auto}
+.panel-head{display:flex;justify-content:space-between;align-items:center}
+.x{border:0;background:var(--bg);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px}
+.line{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-bottom:1px solid var(--line);padding-block:10px;font-size:15px}
+.line small{display:block;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer}
+.empty{color:var(--muted);padding-block:20px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px;font-weight:600;z-index:60;max-width:calc(100% - 32px)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Цветочная гостиная">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="var(--peony)"><circle cx="20" cy="12" r="7"/><circle cx="12" cy="20" r="7" opacity=".75"/><circle cx="28" cy="20" r="7" opacity=".75"/><circle cx="20" cy="27" r="7" opacity=".55"/></g><circle cx="20" cy="20" r="4" fill="var(--bg)"/></svg>
+      Цветочная гостиная
+    </a>
+    <nav aria-label="Разделы">
+      <a href="#catalog">Каталог</a><a href="#how">Как мы работаем</a><a href="#subscription">Подписка</a><a href="#faq">Вопросы</a>
+    </nav>
+    <button class="cart-btn" id="cartOpen">Корзина<b id="cartCount">0</b></button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Цветочная мастерская с доставкой</div>
+      <h1>Букеты, которые входят в дом <em>как гости</em></h1>
+      <p class="lead">Собираем из сезонных цветов в день доставки. Перед отправкой пришлём фото готового букета: вы одобряете, и только потом курьер выезжает.</p>
+      <div class="hero-art" aria-hidden="true"><svg id="heroArt" viewBox="0 0 600 200" preserveAspectRatio="xMinYMid meet"></svg></div>
+    </div>
+    <form class="check" id="checkForm" novalidate>
+      <h3>Когда привезти?</h3>
+      <p style="color:var(--muted);font-size:14px">Проверьте адрес и время сразу, чтобы не выбирать букет, который не успеет.</p>
+      <div class="field"><label for="addr">Улица и дом получателя</label><input id="addr" placeholder="Например, ул. Садовая, 12" autocomplete="street-address"></div>
+      <div class="row2">
+        <div class="field"><label for="date">Дата</label><input id="date" type="date"></div>
+        <div class="field"><label for="who">Кому</label><select id="who"><option>Маме</option><option>Любимой</option><option>Коллеге</option><option>Себе</option><option>Другу</option></select></div>
+      </div>
+      <div class="field"><label>Интервал, 1 час</label><div class="slots" id="slots"></div></div>
+      <button class="btn" type="submit">Проверить доставку</button>
+      <div class="check-result" id="checkResult" hidden></div>
+    </form>
+  </div>
+</section>
+
+<div class="promises">
+  <div class="wrap prom-grid">
+    <div class="prom"><b>Фото до отправки</b><span>Согласуете букет в мессенджере, правки бесплатно</span></div>
+    <div class="prom"><b>Окно в 1 час</b><span>С 8:00 до 22:00, срочно — за 90 минут</span></div>
+    <div class="prom"><b>7 дней свежести</b><span>Завял раньше — соберём новый</span></div>
+    <div class="prom"><b>Фото вручения</b><span>Курьер пришлёт снимок, если получатель не против</span></div>
+  </div>
+</div>
+
+<section id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow">Каталог</div><h2>Букеты этой недели</h2><p>У каждого три размера: «Камерный», «Гостиный» и «Бальный». Цена меняется сразу.</p></div>
+      <div class="chips" id="filters"></div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="steps" id="how">
+  <div class="wrap">
+    <div class="eyebrow">Как мы работаем</div>
+    <h2>От заказа до вазы</h2>
+    <div class="step-grid">
+      <div class="step"><div class="n">1</div><h3>Вы выбираете</h3><p>Букет, размер, открытку и часовой интервал. Оплата картой или СБП.</p></div>
+      <div class="step"><div class="n">2</div><h3>Флорист собирает</h3><p>Из цветов, пришедших этим утром, а не со склада.</p></div>
+      <div class="step"><div class="n">3</div><h3>Вы видите фото</h3><p>Присылаем снимок готового букета. Можно попросить заменить цветок или ленту.</p></div>
+      <div class="step"><div class="n">4</div><h3>Курьер вручает</h3><p>В выбранный час, в термобоксе зимой. Статус виден по ссылке из СМС.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="subscription">
+  <div class="wrap sub-grid">
+    <div>
+      <div class="eyebrow">Подписка</div>
+      <h2>Цветы в доме без напоминаний</h2>
+      <p class="lead" style="margin-top:14px">Каждую неделю или раз в месяц флорист собирает новый сезонный букет. Вы не выбираете, а получаете то, что сейчас лучше всего.</p>
+      <ul class="sub-list">
+        <li>Скидка до 20% от цены каталога и бесплатная доставка</li>
+        <li>Пропустить или перенести доставку можно за сутки</li>
+        <li>Цветы приезжают чуть нераскрытыми и стоят дольше</li>
+        <li>Можно оформить в подарок на 3, 6 или 12 месяцев</li>
+      </ul>
+    </div>
+    <form class="calc" id="calc">
+      <h3 style="font-size:24px">Посчитать подписку</h3>
+      <div class="field"><label>Как часто</label><div class="seg" id="freq"></div></div>
+      <div class="field"><label>Размер букета</label><div class="seg" id="subSize"></div></div>
+      <div class="field"><label for="months">Срок: <span id="monthsVal">3</span> мес.</label><input id="months" type="range" min="1" max="12" value="3"></div>
+      <div class="total"><div><div style="font-size:14px;color:var(--muted)">За доставку</div><b id="perOne">—</b></div><div style="text-align:right"><small id="save">—</small><div style="font-size:14px;color:var(--muted)" id="sum">—</div></div></div>
+      <button class="btn" type="submit">Добавить подписку в корзину</button>
+    </form>
+  </div>
+</section>
+
+<section class="care">
+  <div class="wrap care-grid">
+    <div><div class="eyebrow" style="color:var(--leaf)">Уход</div><h2>Как продлить букету жизнь</h2><p style="margin-top:14px;color:var(--muted)">Эта карточка лежит в каждой коробке. Пять простых правил дают букету ещё 3–4 дня.</p></div>
+    <dl>
+      <dt>45°</dt><dd>Подрежьте стебли острым ножом под углом, на 2–3 см, сразу перед тем как поставить в воду.</dd>
+      <dt>18–20 °C</dt><dd>Вода комнатной температуры. Для тюльпанов и нарциссов — прохладная.</dd>
+      <dt>2 дня</dt><dd>Меняйте воду и подрезайте стебли раз в два дня. Листья не должны касаться воды.</dd>
+      <dt>1 пакетик</dt><dd>Подкормка из коробки на литр воды. Сахар и аспирин не нужны.</dd>
+      <dt>0 фруктов</dt><dd>Не ставьте букет рядом с фруктами и батареей: этилен и сухой воздух старят цветы.</dd>
+    </dl>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap faq">
+    <div class="eyebrow">Вопросы</div>
+    <h2 style="margin-bottom:16px">Частые вопросы</h2>
+    <details open><summary>Что будет, если букет на фото мне не понравится?</summary><p>Напишите, что поменять. Флорист заменит цветы или упаковку и пришлёт новое фото. Если не договоримся, вернём деньги до отправки курьера.</p></details>
+    <details><summary>Букет будет точно как на сайте?</summary><p>Форма, палитра и размер — да. Отдельные цветы могут отличаться по сезону: если чего-то нет, предложим равноценную замену на фото до отправки.</p></details>
+    <details><summary>Можно ли сохранить сюрприз?</summary><p>Да. Курьер не звонит получателю заранее, если вы так отметили. Нужен только номер на случай, если никого не будет дома.</p></details>
+    <details><summary>Как работает гарантия свежести?</summary><p>Если при соблюдении правил ухода букет завял раньше 7 дней, пришлите фото — соберём и привезём новый бесплатно.</p></details>
+    <details><summary>Есть ли корпоративные заказы?</summary><p>Да: регулярные букеты в офис, оплата по счёту, единый менеджер и закрывающие документы.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div><div class="logo" style="color:var(--bg)">Цветочная гостиная</div><p style="margin-top:10px;max-width:40ch">Цветочная мастерская. Собираем букеты из сезонных цветов и доставляем по городу с 8:00 до 22:00.</p></div>
+    <div><h4>Покупателям</h4><ul><li>Доставка и оплата</li><li>Гарантия свежести</li><li>Корпоративным клиентам</li></ul></div>
+    <div><h4>Контакты</h4><ul><li>+7 (000) 000-00-00</li><li>hello@example.ru</li><li>Ежедневно 8:00–22:00</li></ul></div>
+  </div>
+</footer>
+
+<div class="drawer" id="drawer" hidden>
+  <aside class="panel" role="dialog" aria-label="Корзина">
+    <div class="panel-head"><h3 style="font-size:26px">Корзина</h3><button class="x" id="cartClose" aria-label="Закрыть">×</button></div>
+    <div id="lines"></div>
+    <div class="total"><span>Итого</span><b id="cartTotal">0 ₽</b></div>
+    <form id="order" style="display:grid;gap:12px">
+      <div class="field"><label for="oname">Ваше имя</label><input id="oname" required></div>
+      <div class="field"><label for="ophone">Телефон</label><input id="ophone" type="tel" required></div>
+      <div class="field"><label for="ocard">Текст открытки</label><input id="ocard" placeholder="Необязательно"></div>
+      <button class="btn" type="submit">Оформить заказ</button>
+      <p style="font-size:12px;color:var(--muted)">Это демонстрационный сайт: заказ никуда не отправляется.</p>
+    </form>
+  </aside>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const rub=n=>n.toLocaleString('ru-RU')+' ₽';
+const $=s=>document.querySelector(s);
+const SIZES=[{k:'S',name:'Камерный',m:1},{k:'M',name:'Гостиный',m:1.45},{k:'L',name:'Бальный',m:2.1}];
+const P={peony:['#E89AB0','#D45C82','#F6C9D6'],rose:['#C8344F','#E2667A','#9E2240'],pastel:['#F2D3C4','#E9B7C9','#F7E7D7'],white:['#F7F3EE','#EDE4DA','#FFFFFF'],sun:['#F2B544','#F6D27A','#E98A3A'],lilac:['#B79ACB','#9A79B8','#D9C6E6']};
+const PHOTOS={"1": "images/pionovaya-gostinaya.jpg", "2": "images/krasnyj-royal.jpg", "3": "images/utrennij-chaj.jpg"};
+const items=[
+ {id:1,name:'Пионовая гостиная',cat:'Пионы',base:4900,comp:'Пионы Сара Бернар, эвкалипт, крафт',pal:'peony',tag:'Хит'},
+ {id:2,name:'Красный рояль',cat:'Розы',base:3900,comp:'Розы Эксплорер 50 см, рускус',pal:'rose'},
+ {id:3,name:'Утренний чай',cat:'Сезонные',base:2700,comp:'Эустома, кустовая роза, маттиола',pal:'pastel',tag:'Сезон'},
+ {id:4,name:'Белая скатерть',cat:'В коробке',base:5200,comp:'Гортензия, белые розы, коробка-шляпная',pal:'white'},
+ {id:5,name:'Солнечный подоконник',cat:'Сезонные',base:2400,comp:'Ранункулюсы, мимоза, ромашка',pal:'sun'},
+ {id:6,name:'Сиреневый вечер',cat:'В коробке',base:3600,comp:'Сирень, тюльпаны, лаванда',pal:'lilac',tag:'Новинка'}
+];
+const filters=['Все','Пионы','Розы','Сезонные','В коробке','До 3000 ₽'];
+let filt='Все';const chosen={};
+
+function rand(seed){return()=>((seed=Math.imul(seed^seed>>>15,seed|1)+0x6D2B79F5|0)>>>0)/4294967296}
+function bouquet(pal,seed,w=300,h=255){
+  const r=rand(seed*9973+7),c=P[pal];let s='';
+  s+=`<path d="M${w/2-26} ${h} L${w/2-6} ${h*0.58} L${w/2+6} ${h*0.58} L${w/2+26} ${h}Z" fill="var(--leaf)" opacity=".35"/>`;
+  for(let i=0;i<7;i++){const a=-2.6+i*0.55+r()*.2,x=w/2+Math.cos(a)*90,y=h*0.48+Math.sin(a)*70;s+=`<ellipse cx="${x}" cy="${y}" rx="26" ry="10" fill="var(--leaf)" opacity=".55" transform="rotate(${a*57.3} ${x} ${y})"/>`}
+  for(let i=0;i<13;i++){const ang=r()*Math.PI*2,d=r()*62,x=w/2+Math.cos(ang)*d*1.3,y=h*0.42+Math.sin(ang)*d*.8,rr=16+r()*16,col=c[i%3];
+    s+=`<circle cx="${x}" cy="${y}" r="${rr}" fill="${col}"/><circle cx="${x+rr*.15}" cy="${y-rr*.1}" r="${rr*.55}" fill="#fff" opacity=".18"/><circle cx="${x}" cy="${y}" r="${rr*.18}" fill="#000" opacity=".12"/>`}
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Иллюстрация букета">${s}</svg>`;
+}
+function price(it){return Math.round(it.base*SIZES.find(z=>z.k===(chosen[it.id]||'M')).m/10)*10}
+
+function renderFilters(){$('#filters').innerHTML=filters.map(f=>`<button class="chip" aria-pressed="${f===filt}" data-f="${f}">${f}</button>`).join('')}
+function renderGrid(){
+  const list=items.filter(it=>filt==='Все'||(filt==='До 3000 ₽'?price(it)<=3000:it.cat===filt));
+  $('#grid').innerHTML=list.length?list.map(it=>`<article class="card"><div class="pic">${PHOTOS[it.id]?`<img src="${PHOTOS[it.id]}" alt="Букет «${it.name}»: ${it.comp}" loading="lazy">`:bouquet(it.pal,it.id)}${it.tag?`<span class="tag">${it.tag}</span>`:''}</div>
+  <div class="body"><h3>${it.name}</h3><p class="comp">${it.comp}</p>
+  <div class="sizes">${SIZES.map(z=>`<button class="size" data-id="${it.id}" data-s="${z.k}" aria-pressed="${(chosen[it.id]||'M')===z.k}">${z.name}</button>`).join('')}</div>
+  <div class="buy"><span class="price">${rub(price(it))}</span><button class="btn" data-add="${it.id}">В корзину</button></div></div></article>`).join(''):'<p style="color:var(--muted)">В этой категории сейчас ничего нет. Посмотрите все букеты.</p>';
+}
+$('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;filt=b.dataset.f;renderFilters();renderGrid()};
+$('#grid').onclick=e=>{const s=e.target.closest('.size');if(s){chosen[s.dataset.id]=s.dataset.s;renderGrid();return}
+  const a=e.target.closest('[data-add]');if(a){const it=items.find(i=>i.id==a.dataset.add);const z=SIZES.find(z=>z.k===(chosen[it.id]||'M'));addCart(it.name+' · '+z.name,price(it));}};
+
+/* hero art */
+(function(){const r=rand(42);let s='';for(let b=0;b<5;b++){const cx=60+b*125,pal=Object.keys(P)[b];s+=`<g opacity="${.55+b*.08}">`;for(let i=0;i<7;i++){const x=cx+(r()-.5)*60,y=100+(r()-.5)*70,rr=12+r()*14;s+=`<circle cx="${x}" cy="${y}" r="${rr}" fill="${P[pal][i%3]}"/>`}s+='</g>'}$('#heroArt').innerHTML=s})();
+
+/* delivery checker */
+const slots=['8–9','10–11','12–13','14–15','16–17','18–19','20–21','21–22'];let slot='12–13';
+const dateEl=$('#date');const t=new Date();t.setDate(t.getDate()+1);dateEl.value=t.toISOString().slice(0,10);dateEl.min=new Date().toISOString().slice(0,10);
+function renderSlots(){$('#slots').innerHTML=slots.map(s=>`<button type="button" class="slot" aria-pressed="${s===slot}" data-s="${s}">${s}</button>`).join('')}
+$('#slots').onclick=e=>{const b=e.target.closest('[data-s]');if(b){slot=b.dataset.s;renderSlots()}};renderSlots();
+$('#checkForm').onsubmit=e=>{e.preventDefault();const a=$('#addr').value.trim(),res=$('#checkResult');
+  if(!a){res.hidden=false;res.textContent='Укажите улицу и дом, чтобы мы проверили зону доставки.';return}
+  const d=new Date(dateEl.value).toLocaleDateString('ru-RU',{day:'numeric',month:'long'});
+  res.hidden=false;res.textContent=`Успеваем: ${d}, ${slot}, по адресу «${a}». Доставка ${$('#who').value==='Себе'?'':'сюрпризом '}— 390 ₽, от 5000 ₽ бесплатно.`};
+
+/* subscription */
+const FREQ=[{k:'w',n:'Раз в неделю',per:4.3,disc:.2},{k:'2w',n:'Раз в 2 недели',per:2.15,disc:.15},{k:'m',n:'Раз в месяц',per:1,disc:.1}];
+const SUB=[{k:'S',n:'Камерный',p:2600},{k:'M',n:'Гостиный',p:3700},{k:'L',n:'Бальный',p:5400}];
+let fq='2w',ss='M';
+function seg(el,arr,cur,key){$(el).innerHTML=arr.map(o=>`<button type="button" aria-pressed="${o.k===cur}" data-k="${o.k}">${o.n}</button>`).join('')}
+function calc(){seg('#freq',FREQ,fq);seg('#subSize',SUB,ss);const f=FREQ.find(x=>x.k===fq),z=SUB.find(x=>x.k===ss),m=+$('#months').value;
+  $('#monthsVal').textContent=m;const one=Math.round(z.p*(1-f.disc)/10)*10,n=Math.round(f.per*m);
+  $('#perOne').textContent=rub(one);$('#save').textContent='−'+Math.round(f.disc*100)+'% и доставка бесплатно';$('#sum').textContent=`${n} доставок · ${rub(one*n)}`;return{one,n,f,z,m}}
+$('#freq').onclick=e=>{const b=e.target.closest('[data-k]');if(b){fq=b.dataset.k;calc()}};
+$('#subSize').onclick=e=>{const b=e.target.closest('[data-k]');if(b){ss=b.dataset.k;calc()}};
+$('#months').oninput=calc;
+$('#calc').onsubmit=e=>{e.preventDefault();const c=calc();addCart(`Подписка: ${c.z.n}, ${c.f.n.toLowerCase()}, ${c.m} мес.`,c.one*c.n)};calc();
+
+/* cart */
+let cart=[];
+function addCart(name,p){const ex=cart.find(c=>c.name===name);ex?ex.q++:cart.push({name,p,q:1});renderCart();toast('Добавлено в корзину')}
+function renderCart(){const n=cart.reduce((a,c)=>a+c.q,0);$('#cartCount').textContent=n;
+  $('#lines').innerHTML=cart.length?cart.map((c,i)=>`<div class="line"><div>${c.name}<small>${rub(c.p)}</small></div><div class="qty"><button data-d="${i}" aria-label="Меньше">−</button>${c.q}<button data-i="${i}" aria-label="Больше">+</button></div><b>${rub(c.p*c.q)}</b></div>`).join(''):'<p class="empty">Пока пусто. Выберите букет в каталоге.</p>';
+  $('#cartTotal').textContent=rub(cart.reduce((a,c)=>a+c.p*c.q,0))}
+$('#lines').onclick=e=>{const d=e.target.dataset;if(d.i){cart[d.i].q++}else if(d.d){cart[d.d].q--;if(!cart[d.d].q)cart.splice(d.d,1)}renderCart()};
+$('#cartOpen').onclick=()=>{$('#drawer').hidden=false;$('#cartClose').focus()};
+$('#cartClose').onclick=()=>$('#drawer').hidden=true;
+$('#drawer').onclick=e=>{if(e.target.id==='drawer')$('#drawer').hidden=true};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#drawer').hidden=true});
+$('#order').onsubmit=e=>{e.preventDefault();if(!cart.length){toast('Корзина пуста');return}if(!$('#oname').value||!$('#ophone').value){toast('Укажите имя и телефон');return}
+  cart=[];renderCart();$('#drawer').hidden=true;toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
+
+renderFilters();renderGrid();renderCart();
+</script>
+
+</body>
+</html>
