@@ -58,8 +58,11 @@ nav a:hover{color:var(--ink)}
 .hero h1{font-size:clamp(38px,6vw,68px);margin-block:14px 20px}
 .hero h1 em{font-style:normal;color:var(--peony)}
 .lead{font-size:18px;color:var(--muted);max-width:52ch}
-.hero-art{position:relative;margin-top:28px;height:200px}
+.hero-art{position:relative;margin-top:28px;height:170px;max-width:560px}
 .hero-art svg{position:absolute;inset:0;width:100%;height:100%}
+.bq{transform-box:fill-box;animation:bqIn .6s ease-out both;animation-delay:var(--d)}
+.hero-art .bq:hover{filter:drop-shadow(0 6px 8px rgba(10,70,70,.25))}
+@keyframes bqIn{from{opacity:.4;translate:0 8px}to{opacity:1;translate:0 0}}
 .check{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:16px;box-shadow:0 20px 50px -30px rgba(10,70,70,.3)}
 .check h3{font-size:24px}
 .field{display:grid;gap:6px}
@@ -350,8 +353,36 @@ $('#filters').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;filt
 $('#grid').onclick=e=>{const s=e.target.closest('.size');if(s){chosen[s.dataset.id]=s.dataset.s;renderGrid();return}
   const a=e.target.closest('[data-add]');if(a){const it=items.find(i=>i.id==a.dataset.add);const z=SIZES.find(z=>z.k===(chosen[it.id]||'M'));addCart(it.name+' · '+z.name,price(it));}};
 
-/* hero art */
-(function(){const r=rand(42);let s='';for(let b=0;b<5;b++){const cx=60+b*125,pal=Object.keys(P)[b];s+=`<g opacity="${.55+b*.08}">`;for(let i=0;i<7;i++){const x=cx+(r()-.5)*60,y=100+(r()-.5)*70,rr=12+r()*14;s+=`<circle cx="${x}" cy="${y}" r="${rr}" fill="${P[pal][i%3]}"/>`}s+='</g>'}$('#heroArt').innerHTML=s})();
+/* hero: иконки букетов */
+(function(){
+  const F={
+    peony:(x,y,c)=>`<circle cx="${x}" cy="${y}" r="13" fill="${c[0]}"/><circle cx="${x-3}" cy="${y-2}" r="8" fill="${c[2]}"/><circle cx="${x+2}" cy="${y+1}" r="4.5" fill="${c[1]}"/>`,
+    rose:(x,y,c)=>`<circle cx="${x}" cy="${y}" r="12" fill="${c[0]}"/><path d="M${x-6} ${y+1}a6 6 0 1 1 6 6a4 4 0 1 1 -4-4a2 2 0 1 1 2 2" fill="none" stroke="${c[2]}" stroke-width="2" stroke-linecap="round"/>`,
+    tulip:(x,y,c)=>`<path d="M${x-10} ${y-8}l5 6l5-9l5 9l5-6v8a10 10 0 0 1-20 0z" fill="${c[0]}"/><path d="M${x} ${y-11}l5 9v6" fill="none" stroke="${c[1]}" stroke-width="2"/>`,
+    daisy:(x,y,c)=>{let s='';for(let i=0;i<8;i++){s+=`<ellipse cx="${x}" cy="${y-8}" rx="3.6" ry="7" fill="${c[0]}" transform="rotate(${i*45} ${x} ${y})"/>`}return s+`<circle cx="${x}" cy="${y}" r="4.5" fill="${c[1]}"/>`},
+    lavender:(x,y,c)=>{let s=`<path d="M${x} ${y+12}V${y-14}" stroke="var(--leaf)" stroke-width="2"/>`;for(let i=0;i<6;i++){s+=`<ellipse cx="${x+(i%2?3:-3)}" cy="${y-12+i*4.5}" rx="3.4" ry="2.6" fill="${c[i%2]}"/>`}return s}
+  };
+  const B=[
+    {f:'peony',c:['#F2B6C8','#D45C82','#FBDCE5'],name:'Пионы'},
+    {f:'rose',c:['#C8344F','#9E2240','#F08A99'],name:'Розы'},
+    {f:'tulip',c:['#F6A04D','#E07A2A'],name:'Тюльпаны'},
+    {f:'daisy',c:['#FFFFFF','#F2B544'],name:'Ромашки'},
+    {f:'lavender',c:['#A98BD0','#C9B3E6'],name:'Лаванда'}
+  ];
+  const icon=(b,i)=>{const ox=i*120+5,draw=F[b.f];
+    return `<g class="bq" transform="translate(${ox} 20)" style="--d:${i*80}ms"><title>${b.name}</title>
+      <ellipse cx="34" cy="58" rx="13" ry="5" fill="var(--leaf)" transform="rotate(-35 34 58)"/>
+      <ellipse cx="76" cy="58" rx="13" ry="5" fill="var(--leaf)" transform="rotate(35 76 58)"/>
+      <ellipse cx="55" cy="40" rx="5" ry="12" fill="var(--leaf)" opacity=".8"/>
+      ${draw(38,46,b.c)}${draw(72,46,b.c)}${draw(55,30,b.c)}
+      <path d="M22 62H88L62 132H48Z" fill="var(--surface)" stroke="var(--peony)" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M22 62L55 98L88 62" fill="none" stroke="var(--line)" stroke-width="1.5"/>
+      <path d="M46 112q-12-8-14 2q8 6 14-2zM64 112q12-8 14 2q-8 6-14-2z" fill="var(--coral)"/>
+      <circle cx="55" cy="112" r="4" fill="var(--coral)"/>
+    </g>`};
+  $('#heroArt').setAttribute('viewBox','0 0 600 160');
+  $('#heroArt').innerHTML=B.map(icon).join('');
+})();
 
 /* delivery checker */
 const slots=['8–9','10–11','12–13','14–15','16–17','18–19','20–21','21–22'];let slot='12–13';
