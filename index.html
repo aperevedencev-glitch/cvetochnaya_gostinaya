@@ -392,7 +392,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
       <div class="field"><label for="ophone">Телефон</label><input id="ophone" type="tel" required></div>
       <div class="field"><label for="ocard">Текст открытки</label><input id="ocard" placeholder="Необязательно"></div>
       <button class="btn" type="submit">Оформить заказ</button>
-      <input type="text" id="owebsite" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px">
+      <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label for="hp_fax">Не заполняйте</label><input type="text" id="hp_fax" name="hp_fax_number" tabindex="-1" autocomplete="one-time-code" data-lpignore="true" data-1p-ignore></div>
       <p style="font-size:12px;color:var(--muted)" id="orderNote">Это демонстрационный сайт: заказ никуда не отправляется.</p>
     </form>
   </aside>
@@ -493,13 +493,13 @@ $('#order').onsubmit=async e=>{e.preventDefault();
     const btn=e.submitter||$('#order button[type=submit]');btn.disabled=true;btn.textContent='Отправляем…';
     try{
       const r=await fetch(LEAD_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({
-        name,phone,card:$('#ocard').value.trim(),website:$('#owebsite').value,
+        name,phone,card:$('#ocard').value.trim(),website:$('#hp_fax').value,
         items:cart.map(c=>({name:c.name,q:c.q,p:c.p})),total:cart.reduce((a,c)=>a+c.p*c.q,0),delivery:lastDelivery})});
       if(!r.ok){let why='';try{why=(await r.json()).error||''}catch(_){}throw new Error(r.status+(why?' '+why:''))}
     }catch(err){console.error('lead error',err);toast('Не удалось отправить ('+(err.message||'нет связи')+'). Позвоните: +7 (916) 831-92-44');return}
     finally{btn.disabled=false;btn.textContent='Оформить заказ'}
   }
-  cart=[];renderCart();$('#drawer').hidden=true;$('#order').reset();toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
+  cart=[];renderCart();$('#drawer').hidden=true;$('#order').reset();toast(LEAD_URL?'✓ Заявка отправлена флористу. Он свяжется с вами и пришлёт фото букета':'Демо-режим: заказ никуда не отправлен')};
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2600)}
 
 /* конструктор букета */
