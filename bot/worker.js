@@ -322,6 +322,19 @@ export default {
       return json({ webhook: hook, commands: cmds, bot: me.result?.username, admin_chat_id: env.ADMIN_CHAT_ID || 'не задан — напишите боту /id' }, 200);
     }
 
+    if (url.pathname === '/test-lead') {
+      // проверка роли 2 без сайта: /test-lead?key=WEBHOOK_SECRET присылает флористу тестовую заявку
+      if (!env.WEBHOOK_SECRET || url.searchParams.get('key') !== env.WEBHOOK_SECRET) {
+        return new Response('Нужен параметр ?key=WEBHOOK_SECRET', { status: 403 });
+      }
+      if (!env.ADMIN_CHAT_ID) return json({ ok: false, error: 'ADMIN_CHAT_ID не задан' }, 500);
+      const r = await send(env, env.ADMIN_CHAT_ID, formatLead({
+        name: 'Тестовая заявка', phone: '+7 000 000-00-00',
+        items: [{ name: 'Проверка связи сайта и бота', q: 1, p: 0 }],
+      }));
+      return json({ ok: !!r?.ok, telegram: r?.ok ? 'отправлено' : (r?.description || 'нет ответа'), admin_chat_id: env.ADMIN_CHAT_ID }, r?.ok ? 200 : 502);
+    }
+
     if (url.pathname === '/status') {
       // проверка без секретов: задан ли токен, куда смотрит вебхук, задан ли получатель заявок
       const info = tokenOf(env) ? await tg(env, 'getWebhookInfo', {}) : null;
@@ -336,7 +349,7 @@ export default {
         admin_chat_id: env.ADMIN_CHAT_ID ? 'задан' : 'НЕ ЗАДАН',
         webhook_secret: env.WEBHOOK_SECRET ? 'задан' : 'НЕ ЗАДАН',
         allowed_origin: env.ALLOWED_ORIGIN || '* (любой сайт)',
-        version: 'salon-de-fleur-3',
+        version: 'salon-de-fleur-4',
       }, 200);
     }
 
