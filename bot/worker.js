@@ -1,5 +1,5 @@
 /**
- * Телеграм-бот «Цветочная гостиная» — Cloudflare Worker.
+ * Телеграм-бот Salon de Fleur «Цветочная гостиная» — Cloudflare Worker.
  *
  * Роль 1. Консультант: клиент пишет боту, получает приветствие и меню (/start),
  *         ответы на частые вопросы; любое его сообщение уходит флористу,
@@ -21,7 +21,8 @@
  */
 
 const SHOP = {
-  name: 'Цветочная гостиная',
+  name: 'Salon de Fleur',
+  sub: 'Цветочная гостиная',
   phone: '+7 (916) 831-92-44',
   email: 'gusarova.all@yandex.ru',
   hours: 'ежедневно с 8:00 до 22:00',
@@ -53,7 +54,7 @@ const BACK = [[{ text: '« Меню', callback_data: 'menu' }]];
 
 function greeting(firstName) {
   const hi = firstName ? `Здравствуйте, ${esc(firstName)}!` : 'Здравствуйте!';
-  return `${hi} Это <b>${SHOP.name}</b> — цветочная мастерская с доставкой.\n\n` +
+  return `${hi} Это <b>${SHOP.name}</b> — «${SHOP.sub}», мастерская букетов с доставкой.\n\n` +
     'Собираем букеты из сезонных цветов в день доставки и присылаем фото готового букета до отправки.\n\n' +
     'Выберите, что вас интересует, или просто напишите вопрос — флорист ответит здесь же.';
 }
@@ -91,7 +92,7 @@ function section(key, env) {
       return 'Напишите вопрос прямо сюда — можно приложить фото букета-примера. ' +
         `Флорист ответит в этом чате (${SHOP.hours}).`;
     case 'contacts':
-      return `<b>${SHOP.name}</b>\n📞 ${SHOP.phone}\n✉️ ${SHOP.email}\n🕗 ${SHOP.hours}` + site;
+      return `<b>${SHOP.name}</b> — ${SHOP.sub}\n📞 ${SHOP.phone}\n✉️ ${SHOP.email}\n🕗 ${SHOP.hours}` + site;
     default:
       return null;
   }
@@ -335,11 +336,11 @@ export default {
         admin_chat_id: env.ADMIN_CHAT_ID ? 'задан' : 'НЕ ЗАДАН',
         webhook_secret: env.WEBHOOK_SECRET ? 'задан' : 'НЕ ЗАДАН',
         allowed_origin: env.ALLOWED_ORIGIN || '* (любой сайт)',
-        version: 'cvetochnaya-gostinaya-2',
+        version: 'salon-de-fleur-3',
       }, 200);
     }
 
-    return new Response(`${SHOP.name}: бот работает`, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
+    return new Response(`${SHOP.name} — ${SHOP.sub}: бот работает`, { headers: { 'content-type': 'text/plain; charset=utf-8' } });
   },
 };
 
