@@ -8,14 +8,14 @@
  *         бот присылает её флористу в личку.
  *
  * Переменные окружения (Settings → Variables and Secrets):
- *   BOT_TOKEN       — токен от @BotFather (секрет)
+ *   BOT_TOKEN       — токен от @BotFather (секрет); подойдёт и уже заданный TELEGRAM_BOT_TOKEN
  *   ADMIN_CHAT_ID   — ваш chat id: напишите боту /id, он его покажет
  *   WEBHOOK_SECRET  — любая строка из латиницы и цифр, 16+ символов (секрет)
  *   SITE_URL        — адрес сайта, например https://aperevedencev-glitch.github.io/cvetochnaya_gostinaya/
  *   ALLOWED_ORIGIN  — откуда принимать заявки, например https://aperevedencev-glitch.github.io
  *
  * Маршруты:
- *   POST /telegram         — сюда Телеграм присылает сообщения (вебхук)
+ *   POST /webhook          — сюда Телеграм присылает сообщения (вебхук; /telegram тоже работает)
  *   POST /lead             — сюда сайт присылает заявки
  *   GET  /setup?key=СЕКРЕТ — один раз: подключить вебхук и меню команд
  */
@@ -99,8 +99,10 @@ function section(key, env) {
 
 /* ---------- Telegram API ---------- */
 
+const tokenOf = (env) => env.BOT_TOKEN || env.TELEGRAM_BOT_TOKEN;
+
 async function tg(env, method, payload) {
-  const res = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/${method}`, {
+  const res = await fetch(`https://api.telegram.org/bot${tokenOf(env)}/${method}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(payload),
@@ -276,7 +278,7 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    if (url.pathname === '/telegram' && request.method === 'POST') {
+    if ((url.pathname === '/webhook' || url.pathname === '/telegram') && request.method === 'POST') {
       if (request.headers.get('x-telegram-bot-api-secret-token') !== env.WEBHOOK_SECRET) {
         return new Response('forbidden', { status: 403 });
       }
@@ -295,7 +297,7 @@ export default {
         return new Response('Нужен параметр ?key=WEBHOOK_SECRET', { status: 403 });
       }
       const hook = await tg(env, 'setWebhook', {
-        url: `${url.origin}/telegram`,
+        url: `${url.origin}/webhook`,
         secret_token: env.WEBHOOK_SECRET,
         allowed_updates: ['message', 'callback_query'],
         drop_pending_updates: true,
@@ -308,7 +310,24 @@ export default {
         ],
       });
       const me = await tg(env, 'getMe', {});
-      return json({ webhook: hook, commands: cmds, bot: me.result?.username, admin_chat_id: env.ADMIN_CHAT_ID || 'не задан' }, 200);
+      return json({ webhook: hook, commands: cmds, bot: me.result?.username, admin_chat_id: env.ADMIN_CHAT_ID || 'не задан — напишите боту /id' }, 200);
+    }
+
+    if (url.pathname === '/status') {
+      // проверка без секретов: задан ли токен, куда смотрит вебхук, задан ли получатель заявок
+      const info = tokenOf(env) ? await tg(env, 'getWebhookInfo', {}) : null;
+      const me = tokenOf(env) ? await tg(env, 'getMe', {}) : null;
+      return json({
+        token: tokenOf(env) ? 'задан' : 'НЕ ЗАДАН',
+        bot: me?.result?.username || null,
+        webhook_url: info?.result?.url || 'не подключён',
+        webhook_points_here: info?.result?.url === `${url.origin}/webhook`,
+        pending_updates: info?.result?.pending_update_count ?? null,
+        last_error: info?.result?.last_error_message || null,
+        admin_chat_id: env.ADMIN_CHAT_ID ? 'задан' : 'НЕ ЗАДАН',
+        webhook_secret: env.WEBHOOK_SECRET ? 'задан' : 'НЕ ЗАДАН',
+        version: 'cvetochnaya-gostinaya-1',
+      }, 200);
     }
 
     return new Response(`${SHOP.name}: бот работает`, { headers: { 'content-type': 'text/plain; charset=utf-8' } });

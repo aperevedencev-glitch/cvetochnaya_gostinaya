@@ -25,7 +25,7 @@
 
 | Имя | Тип | Значение |
 |---|---|---|
-| `BOT_TOKEN` | Secret | токен от BotFather |
+| `BOT_TOKEN` | Secret | токен от BotFather (если уже задан `TELEGRAM_BOT_TOKEN`, новый не нужен) |
 | `WEBHOOK_SECRET` | Secret | любая строка из латиницы и цифр, 20+ символов, например `Flowers2026SecretKey88` |
 | `SITE_URL` | Text | `https://aperevedencev-glitch.github.io/cvetochnaya_gostinaya/` |
 | `ALLOWED_ORIGIN` | Text | `https://aperevedencev-glitch.github.io` |
@@ -54,6 +54,13 @@ const LEAD_URL='';
 const LEAD_URL='https://flowers-bot.ваше-имя.workers.dev/lead';
 ```
 После сохранения на GitHub форма заказа на сайте начнёт присылать заявки в Телеграм.
+
+## Как проверить, что всё работает
+Откройте `https://адрес-воркера/status`. Бот покажет без секретов:
+- задан ли токен и как называется бот;
+- куда подключён вебхук (`webhook_points_here: true` — всё верно);
+- последнюю ошибку доставки, если она была;
+- заданы ли `ADMIN_CHAT_ID` и `WEBHOOK_SECRET`.
 
 ## Как поменять тексты
 - Контакты — объект `SHOP` в начале `worker.js`.
