@@ -4,34 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="Цветочная гостиная — букеты из сезонных цветов с доставкой. Фото букета перед отправкой, часовые интервалы, подписка на цветы.">
-<title>Цветочная гостиная</title>
+<title>Salon de Fleur</title>
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="icon" type="image/png" href="images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Infant:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: «гостиная» — тёплые комнаты-секции на сливово-лиловом фоне, асимметричный hero с формой доставки справа */
 :root{
-  --bg:#E6F6F4; --surface:#FFFFFF; --wash:#CDEEEA;
-  --ink:#0F3A3C; --muted:#4A6D6F; --line:#BFE2DE;
-  --peony:#0E8178; --peony-ink:#FFFFFF; --coral:#D2513B; --coral-hover:#BC4430; --coral-ink:#FFFFFF; --leaf:#2F6B55; --leaf-soft:#D6F0E8;
-  --display:"Prata", Georgia, "Times New Roman", serif;
+  --bg:#E9FEF5; --surface:#FFFFFF; --wash:#D8F4E9;
+  --ink:#2D1A44; --muted:#6A5A78; --line:#CFE8DE;
+  --peony:#5A3084; --peony-ink:#FFFFFF; --coral:#5A3084; --coral-hover:#45226A; --coral-ink:#FFFFFF; --leaf:#6E4E92; --leaf-soft:#F1E8F6; --lavender:#B89CC0;
+  --display:"Great Vibes", "Segoe Script", cursive;
+  --serif:"Cormorant Infant", "Cormorant Garamond", Georgia, serif;
   --body:"Manrope", "Segoe UI", system-ui, sans-serif;
   --r:14px;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E2224; --surface:#14302F; --wash:#183A39; --ink:#E4F7F4; --muted:#9DC4C0; --line:#24504D;
-  --peony:#5FD4C8; --peony-ink:#0E2224; --coral:#FF8B74; --coral-hover:#FFA190; --coral-ink:#2A0E08; --leaf:#8CC9A8; --leaf-soft:#173A30; color-scheme:dark}}
+  --bg:#1B1424; --surface:#251B30; --wash:#2E2340; --ink:#F1EAF6; --muted:#BBA9C9; --line:#3B2E4C;
+  --peony:#CDB0EA; --peony-ink:#1B1424; --coral:#CDB0EA; --coral-hover:#DCC6F2; --coral-ink:#1B1424; --leaf:#D2BCE8; --leaf-soft:#2A2136; --lavender:#8E73A0; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E2224; --surface:#14302F; --wash:#183A39; --ink:#E4F7F4; --muted:#9DC4C0; --line:#24504D;
-  --peony:#5FD4C8; --peony-ink:#0E2224; --coral:#FF8B74; --coral-hover:#FFA190; --coral-ink:#2A0E08; --leaf:#8CC9A8; --leaf-soft:#173A30; color-scheme:dark}
+  --bg:#1B1424; --surface:#251B30; --wash:#2E2340; --ink:#F1EAF6; --muted:#BBA9C9; --line:#3B2E4C;
+  --peony:#CDB0EA; --peony-ink:#1B1424; --coral:#CDB0EA; --coral-hover:#DCC6F2; --coral-ink:#1B1424; --leaf:#D2BCE8; --leaf-soft:#2A2136; --lavender:#8E73A0; color-scheme:dark}
 
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
 .wrap{max-width:1160px;margin:0 auto;padding-inline:20px}
-h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
-h2{font-size:clamp(28px,4vw,40px)}
+h1,h2{font-family:var(--display);font-weight:400;line-height:1.1;text-wrap:balance;margin:0;color:var(--peony)}
+h3{font-family:var(--serif);font-weight:700;line-height:1.2;text-wrap:balance;margin:0}
+h2{font-size:clamp(40px,5.5vw,58px)}
 p{margin:0}
-.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--peony);font-weight:700}
+.eyebrow{font-family:var(--serif);font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink);font-weight:600}
 button,input,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--peony);outline-offset:2px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-weight:600;cursor:pointer;background:var(--coral);color:var(--coral-ink);transition:transform .15s,background .15s}
@@ -43,31 +46,36 @@ section{padding-block:72px}
 /* header */
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;gap:24px;padding-block:14px}
-.logo{font-family:var(--display);font-size:22px;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
-.logo svg{width:30px;height:30px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--peony)}
+.logo img{width:48px;height:48px;flex:none;margin-block:-6px}
+.logo-text{display:grid;line-height:1}
+.logo-name{font-family:var(--display);font-size:32px;color:var(--peony)}
+.logo-sub{font-family:var(--serif);font-size:10.5px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin-top:2px;padding-left:4px}
 nav{display:flex;gap:22px;margin-left:auto}
 nav a{color:var(--muted);text-decoration:none;font-weight:500;font-size:15px}
 nav a:hover{color:var(--ink)}
 .cart-btn{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer;font-weight:600}
 .cart-btn b{display:inline-grid;place-items:center;min-width:22px;height:22px;border-radius:11px;background:var(--coral);color:var(--coral-ink);font-size:12px;margin-left:6px;font-variant-numeric:tabular-nums}
 @media(max-width:760px){nav{display:none}.cart-btn{margin-left:auto}}
+.cart-btn{white-space:nowrap}.logo-name{white-space:nowrap}
+@media(max-width:480px){.logo img{width:40px;height:40px}.logo-name{font-size:27px}.logo-sub{font-size:8.5px;letter-spacing:.24em}.cart-btn{padding:7px 12px}}
 
 /* hero */
 .hero{padding-block:56px 64px}
 .hero-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:48px;align-items:center}
-.hero h1{font-size:clamp(38px,6vw,68px);margin-block:14px 20px}
-.hero h1 em{font-style:normal;color:var(--peony)}
+.hero h1{font-size:clamp(48px,7.5vw,88px);margin-block:14px 20px}
+.hero h1 em{font-style:normal;color:color-mix(in srgb,var(--peony) 55%,var(--lavender))}
 .lead{font-size:18px;color:var(--muted);max-width:52ch}
 .hero-thumbs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-top:32px;max-width:640px}
 .thumb{display:grid;gap:4px;text-decoration:none;color:var(--ink);animation:bqIn .6s ease-out both;animation-delay:var(--d)}
-.thumb-pic{display:block;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--wash);border:2px solid var(--surface);box-shadow:0 8px 20px -12px rgba(10,70,70,.45);transition:transform .2s}
+.thumb-pic{display:block;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--wash);border:2px solid var(--surface);box-shadow:0 8px 20px -12px rgba(70,35,100,.45);transition:transform .2s}
 .thumb-pic img,.thumb-pic svg{width:100%;height:100%;object-fit:cover;display:block}
 .thumb:hover .thumb-pic{transform:translateY(-3px)}
 .thumb-name{font-size:12px;font-weight:600;line-height:1.25}
 .thumb-price{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 @media(max-width:560px){.hero-thumbs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @keyframes bqIn{from{opacity:.4;translate:0 8px}to{opacity:1;translate:0 0}}
-.check{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:16px;box-shadow:0 20px 50px -30px rgba(10,70,70,.3)}
+.check{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px;display:grid;gap:16px;box-shadow:0 20px 50px -30px rgba(70,35,100,.3)}
 .check h3{font-size:24px}
 .field{display:grid;gap:6px}
 .field label{font-size:13px;font-weight:600;color:var(--muted)}
@@ -82,7 +90,7 @@ nav a:hover{color:var(--ink)}
 /* promises */
 .promises{border-block:1px solid var(--line);background:var(--surface);padding-block:28px}
 .prom-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
-.prom b{display:block;font-family:var(--display);font-weight:400;font-size:20px;margin-bottom:4px}
+.prom b{display:block;font-family:var(--serif);font-weight:700;font-size:21px;margin-bottom:4px}
 .prom span{font-size:14px;color:var(--muted)}
 @media(max-width:860px){.prom-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:440px){.prom-grid{grid-template-columns:1fr}}
@@ -114,7 +122,7 @@ nav a:hover{color:var(--ink)}
 .steps{background:var(--wash)}
 .step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:32px}
 .step{display:grid;gap:10px;align-content:start}
-.step .n{font-family:var(--display);font-size:44px;color:var(--peony);line-height:1}
+.step .n{font-family:var(--display);font-size:56px;color:var(--peony);line-height:1}
 .step h3{font-size:20px}
 .step p{font-size:15px;color:var(--muted)}
 @media(max-width:860px){.step-grid{grid-template-columns:1fr 1fr}}
@@ -138,7 +146,7 @@ nav a:hover{color:var(--ink)}
 .care{background:var(--leaf-soft)}
 .care-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:40px}
 .care dl{display:grid;grid-template-columns:auto 1fr;gap:14px 24px;margin:0}
-.care dt{font-family:var(--display);font-size:22px;color:var(--leaf);font-variant-numeric:tabular-nums;white-space:nowrap}
+.care dt{font-family:var(--serif);font-weight:700;font-size:24px;color:var(--leaf);font-variant-numeric:tabular-nums;white-space:nowrap}
 .care dd{margin:0;padding-top:4px}
 @media(max-width:760px){.care-grid{grid-template-columns:1fr}}
 
@@ -200,7 +208,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
 @media(max-width:760px){.foot{grid-template-columns:1fr}}
 
 /* drawer */
-.drawer{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:rgba(5,35,38,.45)}
+.drawer{position:fixed;inset:0;z-index:50;display:flex;justify-content:flex-end;background:rgba(30,15,45,.45)}
 .panel{width:min(420px,100%);height:100%;background:var(--surface);padding:24px 22px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px;overflow:auto}
 .panel-head{display:flex;justify-content:space-between;align-items:center}
 .x{border:0;background:var(--bg);border-radius:50%;width:36px;height:36px;cursor:pointer;font-size:18px}
@@ -218,10 +226,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top" aria-label="Цветочная гостиная">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><g fill="var(--peony)"><circle cx="20" cy="12" r="7"/><circle cx="12" cy="20" r="7" opacity=".75"/><circle cx="28" cy="20" r="7" opacity=".75"/><circle cx="20" cy="27" r="7" opacity=".55"/></g><circle cx="20" cy="20" r="4" fill="var(--bg)"/></svg>
-      Цветочная гостиная
-    </a>
+    <a class="logo" href="#top" aria-label="Salon de Fleur — Цветочная гостиная"><img src="images/logo.png" alt="" width="48" height="48"><span class="logo-text"><span class="logo-name">Salon de Fleur</span><span class="logo-sub">Цветочная гостиная</span></span></a>
     <nav aria-label="Разделы">
       <a href="#catalog">Каталог</a><a href="#builder">Конструктор</a><a href="#how">Как мы работаем</a><a href="#subscription">Подписка</a><a href="#faq">Вопросы</a>
     </nav>
@@ -360,7 +365,7 @@ footer{background:var(--ink);color:var(--bg);padding-block:48px}
 
 <footer>
   <div class="wrap foot">
-    <div><div class="logo" style="color:var(--bg)">Цветочная гостиная</div><p style="margin-top:10px;max-width:40ch">Цветочная мастерская. Собираем букеты из сезонных цветов и доставляем по городу с 8:00 до 22:00.</p></div>
+    <div><div class="logo" style="color:var(--bg)"><img src="images/logo.png" alt="" width="48" height="48"><span class="logo-text"><span class="logo-name" style="color:var(--bg)">Salon de Fleur</span><span class="logo-sub" style="color:var(--bg);opacity:.8">Цветочная гостиная</span></span></div><p style="margin-top:10px;max-width:40ch">Цветочная мастерская. Собираем букеты из сезонных цветов и доставляем по городу с 8:00 до 22:00.</p></div>
     <div><h4>Покупателям</h4><ul><li>Доставка и оплата</li><li>Гарантия свежести</li><li>Корпоративным клиентам</li></ul></div>
     <div><h4>Контакты</h4><ul><li>+7 (916) 831-92-44</li><li>gusarova.all@yandex.ru</li><li>Ежедневно 8:00–22:00</li></ul></div>
   </div>
