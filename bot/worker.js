@@ -245,8 +245,11 @@ function formatLead(d) {
 
 function cors(env, request) {
   const origin = request.headers.get('origin') || '';
-  const allowed = (env.ALLOWED_ORIGIN || '*').split(',').map((s) => s.trim());
-  const ok = allowed.includes('*') || allowed.includes(origin);
+  // «https://site.github.io/путь/» → «https://site.github.io»: прощаем слеш и путь в настройке
+  const allowed = (env.ALLOWED_ORIGIN || '*').split(',').map((s) => s.trim()).filter(Boolean)
+    .map((s) => (s === '*' ? s : s.replace(/^(https?:\/\/[^/]+).*$/i, '$1').toLowerCase()));
+  if (!allowed.length) allowed.push('*');
+  const ok = allowed.includes('*') || allowed.includes(origin.toLowerCase());
   return {
     'access-control-allow-origin': ok ? (allowed.includes('*') ? '*' : origin) : 'null',
     'access-control-allow-methods': 'POST, OPTIONS',
@@ -260,7 +263,11 @@ const json = (obj, status, headers = {}) =>
 
 async function handleLead(request, env) {
   const h = cors(env, request);
-  if (h['access-control-allow-origin'] === 'null') return json({ ok: false, error: 'origin' }, 403, h);
+  if (h['access-control-allow-origin'] === 'null') {
+    console.log('lead rejected: origin', request.headers.get('origin'), 'allowed', env.ALLOWED_ORIGIN);
+    // отвечаем с разрешающим заголовком, чтобы сайт смог показать причину
+    return json({ ok: false, error: 'origin' }, 403, { ...h, 'access-control-allow-origin': request.headers.get('origin') || '*' });
+  }
 
   let d;
   try { d = await request.json(); } catch { return json({ ok: false, error: 'bad json' }, 400, h); }
@@ -268,8 +275,9 @@ async function handleLead(request, env) {
   if (!clip(d.phone, 40) || clip(d.phone, 40).replace(/\D/g, '').length < 6) {
     return json({ ok: false, error: 'Укажите телефон' }, 422, h);
   }
+  if (!env.ADMIN_CHAT_ID) return json({ ok: false, error: 'admin_chat_id' }, 500, h);
   const r = await send(env, env.ADMIN_CHAT_ID, formatLead(d));
-  return r?.ok ? json({ ok: true }, 200, h) : json({ ok: false, error: 'telegram' }, 502, h);
+  return r?.ok ? json({ ok: true }, 200, h) : json({ ok: false, error: 'telegram: ' + (r?.description || 'нет ответа') }, 502, h);
 }
 
 /* ---------- маршрутизация ---------- */
@@ -326,7 +334,8 @@ export default {
         last_error: info?.result?.last_error_message || null,
         admin_chat_id: env.ADMIN_CHAT_ID ? 'задан' : 'НЕ ЗАДАН',
         webhook_secret: env.WEBHOOK_SECRET ? 'задан' : 'НЕ ЗАДАН',
-        version: 'cvetochnaya-gostinaya-1',
+        allowed_origin: env.ALLOWED_ORIGIN || '* (любой сайт)',
+        version: 'cvetochnaya-gostinaya-2',
       }, 200);
     }
 

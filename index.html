@@ -488,8 +488,8 @@ $('#order').onsubmit=async e=>{e.preventDefault();
       const r=await fetch(LEAD_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({
         name,phone,card:$('#ocard').value.trim(),website:$('#owebsite').value,
         items:cart.map(c=>({name:c.name,q:c.q,p:c.p})),total:cart.reduce((a,c)=>a+c.p*c.q,0),delivery:lastDelivery})});
-      if(!r.ok)throw new Error(r.status);
-    }catch(err){toast('Не удалось отправить. Позвоните: +7 (916) 831-92-44');return}
+      if(!r.ok){let why='';try{why=(await r.json()).error||''}catch(_){}throw new Error(r.status+(why?' '+why:''))}
+    }catch(err){console.error('lead error',err);toast('Не удалось отправить ('+(err.message||'нет связи')+'). Позвоните: +7 (916) 831-92-44');return}
     finally{btn.disabled=false;btn.textContent='Оформить заказ'}
   }
   cart=[];renderCart();$('#drawer').hidden=true;$('#order').reset();toast('Заказ принят. Флорист пришлёт фото букета перед отправкой')};
