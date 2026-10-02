@@ -465,7 +465,7 @@ $('#calc').onsubmit=e=>{e.preventDefault();const c=calc();addCart(`Подпис�
 
 /* cart */
 /* заявки уходят в телеграм-бот: вставьте адрес воркера + /lead, например https://flowers-bot.имя.workers.dev/lead */
-const LEAD_URL='';
+const LEAD_URL='https://flowers-bot.a-perevedencev.workers.dev/lead';
 let lastDelivery={};
 if(LEAD_URL)$('#orderNote').textContent='После заказа флорист свяжется с вами и пришлёт фото букета перед отправкой.';
 let cart=[];
